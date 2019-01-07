@@ -1,0 +1,323 @@
+﻿@{
+    ViewBag.Title = "Ajax Data (2)";
+}
+<div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <!-- modal-dialog-centered 顯示置中 -->
+    <!-- 要使用客製化的需加入 modal-dialog-centered -->
+    <div class="modal-dialog modal-dialog-centered" data-backdrop="false" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">資料</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group row">
+                    <div class="col-12 col-sm-2 ">
+                        <label class="col-form-label col-form-label-lg">Date</label>
+                    </div>
+                    <div class="col-12 col-sm-10">
+                        <input id="Dialog_invdate" type="text" class="form-control form-control-lg DialogInput" name="">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-12 col-sm-2 ">
+                        <label class="col-form-label col-form-label-lg">Client</label>
+                    </div>
+                    <div class="col-12 col-sm-10">
+                        <input id="Dialog_name" type="text" class="form-control form-control-lg DialogInput" name="">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-12 col-sm-2 ">
+                        <label class="col-form-label col-form-label-lg">Amount</label>
+                    </div>
+                    <div class="col-12 col-sm-10">
+                        <input id="Dialog_amount" type="text" class="form-control form-control-lg DialogInput" name="">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-12 col-sm-2 ">
+                        <label class="col-form-label col-form-label-lg">Tax</label>
+                    </div>
+                    <div class="col-12 col-sm-10">
+                        <input id="Dialog_tax" type="text" class="form-control form-control-lg DialogInput" name="">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-12 col-sm-2 ">
+                        <label class="col-form-label col-form-label-lg">Total</label>
+                    </div>
+                    <div class="col-12 col-sm-10">
+                        <input id="Dialog_total" type="text" class="form-control form-control-lg DialogInput" name="">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-12 col-sm-2 ">
+                        <label class="col-form-label col-form-label-lg">Notes</label>
+                    </div>
+                    <div class="col-12 col-sm-10">
+                        <input id="Dialog_note" type="text" class="form-control form-control-lg DialogInput" name="">
+                    </div>
+                </div>
+                <input type="hidden" id="Dialog_id">
+            </div>
+            <div class="modal-footer">
+                <button id="Dialog_Add" type="button" class="btn btn-primary dialogbutton">新增</button>
+                <button id="Dialog_Edi" type="button" class="btn btn-primary dialogbutton">修改</button>
+                <button id="Dialog_Del" type="button" class="btn btn-primary dialogbutton">刪除</button>
+                <button id="Dialog_Close" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div>
+    <a id="Add" href="#" class="btn btn-primary">新增</a>
+    <div id="listDiv" class="jqd"></div>
+    @*<div>
+            <table id="list2"></table>
+            <div id="pager2"></div>
+        </div>*@
+
+</div>
+<script type="text/javascript">
+    $(function () {
+        function formatterAct(cellvalue, options, rdata) {
+
+            var str = '';
+            str += '<div class="btn-group">';
+            str += '<a title="修改" class="btn actionEditIcon" style="padding-right:4px;padding-left:4px;padding-bottom:0px;padding-top:0px;" href="#" id="' + options.gid + 'Edit' + options.rowId + '" return:false;="">';
+            str += '<i class="fa fa-pencil-square-o fa-lg"></i></a>';
+            str += '<a title="檢視" class="btn actionViewIcon" style="padding-right:4px;padding-left:4px;padding-bottom:0px;padding-top:0px;" href="#" id="' + options.gid + 'View' + options.rowId + '" return:false;="">';
+            str += '<i class="fa fa-search fa-lg"></i></a>';
+            str += '<a title="刪除" class="btn actionDeleIcon" style="padding-right:4px;padding-left:4px;padding-bottom:0px;padding-top:0px;" href="#" id="' + options.gid + 'Dele' + options.rowId + '" return:false;="">';
+            str += '<i class="fa fa-trash fa-lg"></i></a>';
+            str += '</div>';
+            return str;
+        }
+
+        function customerloadComplete() {
+            $('#' + 'list2' + ' > tbody > tr:gt(0) ').each(function (i, j) {
+                var tr = $(this);
+                var id = tr.find('td[aria-describedby$=list2_id]').text();
+                //修改
+                $(this).find('td').find('a.actionEditIcon').each(function () {
+                    $(this).off('click');
+                    $(this).on('click', function () {
+                        dialogOpen('Edit', id);
+                    });
+                });
+                //檢視
+                $(this).find('td').find('a.actionViewIcon').each(function () {
+                    $(this).off('click');
+                    $(this).on('click', function () {
+                        dialogOpen('View', id);
+                    });
+                });
+                //刪除
+                $(this).find('td').find('a.actionDeleIcon').each(function () {
+                    $(this).off('click');
+                    $(this).on('click', function () {
+                        dialogOpen('Dele', id);
+                    });
+                });
+            });
+        }
+
+        $('#Add').on('click', function () {
+            dialogOpen('Add');
+        })
+
+        $('#Dialog_Add').on('click', function () {
+            $.ajax({
+                type: "POST",
+                data: JSON.stringify({
+                    data: ResultModel(
+                        $('#Dialog_id').val(),
+                        $('#Dialog_invdate').val(),
+                        $('#Dialog_name').val(),
+                        $('#Dialog_amount').val(),
+                        $('#Dialog_tax').val(),
+                        $('#Dialog_total').val(),
+                        $('#Dialog_note').val()
+                    )
+                }),
+                //dataType: "json",
+                url: '@Url.Action("AddData", "JQgrid")',
+                contentType: 'application/json',
+            }).done(function () {
+                createJqgridByCache('listDiv', 'list2', 'pager2');
+                $('#Dialog_Close').click();
+            });          
+        })
+
+        $('#Dialog_Edi').on('click', function () {
+            $.ajax({
+                type: "POST",
+                data: JSON.stringify({
+                    data: ResultModel(
+                        $('#Dialog_id').val(),
+                        $('#Dialog_invdate').val(),
+                        $('#Dialog_name').val(),
+                        $('#Dialog_amount').val(),
+                        $('#Dialog_tax').val(),
+                        $('#Dialog_total').val(),
+                        $('#Dialog_note').val()
+                    )
+                }),
+                //dataType: "json",
+                url: '@Url.Action("EdiData", "JQgrid")',
+                contentType: 'application/json',
+            }).done(function () {
+                $('#Dialog_Close').click();
+                createJqgridByCache('listDiv', 'list2', 'pager2');
+               
+            }); 
+        })
+
+        $('#Dialog_Del').on('click', function () {
+            $.ajax({
+                type: "POST",
+                data: JSON.stringify({
+                    data: ResultModel(
+                        $('#Dialog_id').val(),
+                        $('#Dialog_invdate').val(),
+                        $('#Dialog_name').val(),
+                        $('#Dialog_amount').val(),
+                        $('#Dialog_tax').val(),
+                        $('#Dialog_total').val(),
+                        $('#Dialog_note').val()
+                    )
+                }),
+                //dataType: "json",
+                url: '@Url.Action("DelData", "JQgrid")',
+                contentType: 'application/json',
+            }).done(function () {
+                createJqgridByCache('listDiv', 'list2', 'pager2');
+                $('#Dialog_Close').click();
+            });
+        })
+
+        function dialogOpen(event, id) {
+            $(".dialogbutton").hide();
+            $('.DialogInput').prop('disabled', true);
+            reSetData();
+            setData(id);
+            switch (event) {
+                case 'Add':
+                    $('.DialogInput').prop('disabled', false);
+                    $('#Dialog_Add').show();
+                    break;
+                case 'Edit':
+                    $('.DialogInput').prop('disabled', false);
+                    $('#Dialog_Edi').show();
+                    break;
+                case 'View':
+
+                    break;
+                case 'Dele':
+                    $('#Dialog_Del').show();
+                    break;
+            }
+            $('#exampleModalLong').modal('show');
+        }
+
+        function reSetData() {
+            $('#Dialog_invdate').val('');
+            $('#Dialog_name').val('');
+            $('#Dialog_amount').val('');
+            $('#Dialog_tax').val('');
+            $('#Dialog_total').val('');
+            $('#Dialog_note').val('');
+            $('#Dialog_id').val('');
+        }
+
+        function setData(id) {
+            id = id || '0';
+            if (id != '0') {
+                var data = $("#list2").jqGrid('getRowData', id);
+                $('#Dialog_invdate').val(data.invdate);
+                $('#Dialog_name').val(data.name);
+                $('#Dialog_amount').val(data.amount);
+                $('#Dialog_tax').val(data.tax);
+                $('#Dialog_total').val(data.total);
+                $('#Dialog_note').val(data.note);
+                $('#Dialog_id').val(id);
+            }           
+
+        }
+        createJqgridByCache('listDiv', 'list2', 'pager2');
+
+        function createJqgridByCache(jqgridDivId, listId, pagerId) {
+            $('#' + jqgridDivId).children().remove();
+            $('#' + jqgridDivId).append('<table id="' + listId + '"></table>');
+            $('#' + jqgridDivId).append('<div id="' + pagerId + '"></div>');
+            $('#' + listId).jqGrid({
+                url: '@Url.Action("GetCacheData", "JQgrid")',
+                datatype: 'json',
+                mtype: 'POST',
+                postData: {
+                    type : "JQgrid7"
+                },
+                jsonReader:
+                {
+                    repeatitems: false,
+                },
+                colNames: [
+                    'Action','Inv No', 'Date', 'Client', 'Amount', 'Tax', 'Total', 'Notes'],
+                colModel: [
+                    { name: "act", index: "act", width: 100, sortable: false, formatter: formatterAct },
+                    { name: 'id', index: 'id', width: 100 },
+                    { name: 'invdate', index: 'invdate', width: 100 },
+                    { name: 'name', index: 'name', width: 100 },
+                    { name: 'amount', index: 'amount', align: "right", width: 100 },
+                    { name: 'tax', index: 'tax', align: "right", width: 100 },
+                    { name: 'total', index: 'total', align: "right", width: 100 },
+                    { name: 'note', index: 'note', width: 100, sortable: false }
+                ],
+                rowNum: 10,
+                rowList: [10,20,30],
+                rownumbers: true,
+                rownumWidth: 40,
+                pager: '#' + pagerId,
+                height: 'auto',
+                width: 'auto',
+                viewrecords: true,
+                caption: 'Ajax Data (2)',
+                resizable: false,
+                //autoencode: true,
+                viewsortcols: [true, 'vertival', true],
+                ajaxRowOptions: { contentType: "application/json" },
+                serializeRowData: function (data) {
+                    return JSON.stringify(data);
+                },
+                loadComplete: function () {
+                    jqgridCustom.updatePagerIcons($(this));
+                    customerloadComplete();
+                }
+            });
+            $('#' + listId).jqGrid('navGrid', '#' + pagerId, { edit: false, add: false, del: false});
+        }
+
+        function ResultModel(
+            id,
+            invdate,
+            name,
+            amount,
+            tax,
+            total,
+            note
+        ) {
+            var obj = {};
+            obj['id'] = id;
+            obj['invdate'] = invdate;
+            obj['name'] = name;
+            obj['amount'] = amount;
+            obj['tax'] = tax;
+            obj['total'] = total;
+            obj['note'] = note;
+            return obj;
+        }
+    });
+</script>

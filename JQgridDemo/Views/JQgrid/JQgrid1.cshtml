@@ -1,0 +1,53 @@
+﻿@{
+    ViewBag.Title = "Json Data";
+}
+<div>
+    <table id="list2"></table>
+    <div id="pager2"></div>
+</div>
+<script type="text/javascript">
+    $(function () {
+
+        var data = [
+            { id: "1", invdate: "2007-10-01", name: "test", note: "note", amount: "200.00", tax: "10.00", total: "210.00" },
+            { id: "2", invdate: "2007-10-02", name: "test2", note: "note2", amount: "300.00", tax: "20.00", total: "320.00" },
+            { id: "3", invdate: "2007-09-01", name: "test3", note: "note3", amount: "400.00", tax: "30.00", total: "430.00" },
+            { id: "4", invdate: "2007-10-04", name: "test", note: "note", amount: "200.00", tax: "10.00", total: "210.00" },
+            { id: "5", invdate: "2007-10-05", name: "test2", note: "note2", amount: "300.00", tax: "20.00", total: "320.00" },
+            { id: "6", invdate: "2007-09-06", name: "test3", note: "note3", amount: "400.00", tax: "30.00", total: "430.00" },
+            { id: "7", invdate: "2007-10-04", name: "test", note: "note", amount: "200.00", tax: "10.00", total: "210.00" },
+            { id: "8", invdate: "2007-10-03", name: "test2", note: "note2", amount: "300.00", tax: "20.00", total: "320.00" },
+            { id: "9", invdate: "2007-09-01", name: "test3", note: "note3", amount: "400.00", tax: "30.00", total: "430.00" }
+        ];
+
+        $("#list2").jqGrid({
+            datatype: "local",
+            data: data ,
+            colNames: ['Inv No', 'Date', 'Client', 'Amount', 'Tax', 'Total', 'Notes'],
+            colModel: [
+                { name: 'id', index: 'id', width: 100},
+                { name: 'invdate', index: 'invdate', width: 100 },
+                { name: 'name', index: 'name', width: 100},
+                { name: 'amount', index: 'amount', align: "right", width: 100},
+                { name: 'tax', index: 'tax', align: "right", width: 100},
+                { name: 'total', index: 'total', align: "right", width: 100},
+                { name: 'note', index: 'note', width: 100, sortable: false }
+            ],
+            width: 'auto',
+            //width: '900',
+            height: 'auto',
+            rowNum: 10,
+            rowList: [10, 20, 30],
+            pager: '#pager2',
+            sortname: 'id',
+            viewrecords: true,
+            //resizable: false,
+            //sortorder: "desc",
+            caption: "JSON Example",
+            loadComplete: function () {
+                jqgridCustom.updatePagerIcons($(this));
+            }
+        });
+        $("#list2").jqGrid('navGrid', '#pager2', { edit: false, add: false, del: false});
+    });
+</script>

@@ -1,0 +1,62 @@
+﻿@{
+    ViewBag.Title = "Get Method";
+}
+<div>
+    <div>
+        <a id="" href="#" onclick="alert($('#list2').jqGrid('getGridParam','selrow'))" class="btn btn-primary">selrow</a>
+        <a id="" href="#" onclick="alert($('#list2').jqGrid('getGridParam','page'))" class="btn btn-primary">page</a>
+        <a id="" href="#" onclick="alert($('#list2').jqGrid('getGridParam','rowNum'))" class="btn btn-primary">rowNum</a>
+        <a id="" href="#" onclick="alert($('#list2').jqGrid('getGridParam','records'))" class="btn btn-primary">records</a>
+        <a id="" href="#" onclick="alert($('#list2').jqGrid('getGridParam','selarrrow'))" class="btn btn-primary">selarrrow</a>
+    </div>
+    <div class=""> @*jqd*@
+        <table id="list2"></table>
+        <div id="pager2"></div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+
+        var data = [
+            { id: "1", invdate: "2007-10-01", name: "test", note: "note", amount: "200.00", tax: "10.00", total: "210.00" },
+            { id: "2", invdate: "2007-10-02", name: "test2", note: "note2", amount: "300.00", tax: "20.00", total: "320.00" },
+            { id: "3", invdate: "2007-09-01", name: "test3", note: "note3", amount: "400.00", tax: "30.00", total: "430.00" },
+            { id: "4", invdate: "2007-10-04", name: "test", note: "note", amount: "200.00", tax: "10.00", total: "210.00" },
+            { id: "5", invdate: "2007-10-05", name: "test2", note: "note2", amount: "300.00", tax: "20.00", total: "320.00" },
+            { id: "6", invdate: "2007-09-06", name: "test3", note: "note3", amount: "400.00", tax: "30.00", total: "430.00" },
+            { id: "7", invdate: "2007-10-04", name: "test", note: "note", amount: "200.00", tax: "10.00", total: "210.00" },
+            { id: "8", invdate: "2007-10-03", name: "test2", note: "note2", amount: "300.00", tax: "20.00", total: "320.00" },
+            { id: "9", invdate: "2007-09-01", name: "test3", note: "note3", amount: "400.00", tax: "30.00", total: "430.00" },
+            { id: "10", invdate: "2007-11-04", name: "test", note: "note", amount: "200.00", tax: "10.00", total: "210.00" },
+            { id: "11", invdate: "2007-12-03", name: "test2", note: "note2", amount: "300.00", tax: "20.00", total: "320.00" },
+            { id: "12", invdate: "2007-08-01", name: "test3", note: "note3", amount: "400.00", tax: "30.00", total: "430.00" },
+        ];
+
+        $("#list2").jqGrid({
+            datatype: "local",
+            data: data ,
+            colNames: ['Inv No', 'Date', 'Client', 'Amount', 'Tax', 'Total', 'Notes'],
+            colModel: [
+                { name: 'id', index: 'id', width: 150, sortable: false },
+                { name: 'invdate', index: 'invdate', width: 150, sortable: false },
+                { name: 'name', index: 'name', width: 150, sortable: false },
+                { name: 'amount', index: 'amount', align: "right", width: 150, sortable: false },
+                { name: 'tax', index: 'tax', align: "right", width: 150, sortable: false },
+                { name: 'total', index: 'total', align: "right", width: 150, sortable: false },
+                { name: 'note', index: 'note', width: 150, sortable: false }
+            ],
+            width: 800,
+            height: 'auto',
+            rowNum: 10,
+            rowList: [10, 20, 30],
+            pager: '#pager2',
+            viewrecords: true,
+            multiselect: true,
+            caption: "Get Method",
+            loadComplete: function () {
+                jqgridCustom.updatePagerIcons($(this));
+            }
+        });
+        $("#list2").jqGrid('navGrid', '#pager2', { edit: false, add: false, del: false});
+    });
+</script>

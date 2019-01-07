@@ -1,0 +1,65 @@
+﻿@{
+    ViewBag.Title = "Ajax Data (1)";
+}
+<div>
+    <div id="listDiv" class="jqd"></div>
+    @*<div>
+        <table id="list2"></table>
+        <div id="pager2"></div>
+    </div>*@
+</div>
+<script type="text/javascript">
+    $(function () {
+
+        createJqgridByCache('listDiv', 'list2', 'pager2');
+        
+        function createJqgridByCache(jqgridDivId, listId, pagerId) {
+            $('#' + jqgridDivId).append('<table id="' + listId + '"></table>');
+            $('#' + jqgridDivId).append('<div id="' + pagerId + '"></div>');
+            $('#' + listId).jqGrid({
+                url: '@Url.Action("GetCacheData", "JQgrid")',
+                editurl: '@Url.Action("SetData", "JQgrid")',
+                datatype: 'json',
+                mtype: 'POST',
+                postData: {
+                    type : "JQgrid6"
+                },
+                jsonReader:
+                {
+                    repeatitems: false,
+                },
+                colNames: [
+                    'Inv No', 'Date', 'Client', 'Amount', 'Tax', 'Total', 'Notes'],
+                colModel: [
+                    { name: 'id', index: 'id', width: 80, editable: false, editoptions: { readonly: true, size: 10 } },
+                    { name: 'invdate', index: 'invdate', width: 120, editable: true, editoptions: { size: 10 } },
+                    { name: 'name', index: 'name', width: 120, editable: true, editoptions: { size: 25 } },
+                    { name: 'amount', index: 'amount', width: 120, align: "right", editable: true, editoptions: { size: 10 } },
+                    { name: 'tax', index: 'tax', width: 120, align: "right", editable: true, editoptions: { size: 10 } },
+                    { name: 'total', index: 'total', width: 120, align: "right", editable: true, editoptions: { size: 10 } },
+                    { name: 'note', index: 'note', width: 120, sortable: false, editable: true, edittype: "textarea", editoptions: { rows: "2", cols: "20" } }	
+                ],
+                rowNum: 10,
+                rowList: [10,20,30],
+                rownumbers: true,
+                rownumWidth: 40,
+                pager: '#' + pagerId,
+                height: 'auto',
+                width: 'auto',
+                viewrecords: true,
+                caption: 'Ajax Data (1)',
+                resizable: false,
+                //autoencode: true,
+                viewsortcols: [true, 'vertival', true],
+                ajaxRowOptions: { contentType: "application/json" },
+                serializeRowData: function (data) {
+                    return JSON.stringify(data);
+                },
+                loadComplete: function () {
+                    jqgridCustom.updatePagerIcons($(this));
+                }
+            });
+            $('#' + listId).jqGrid('navGrid', '#' + pagerId, { });
+        }  
+    });
+</script>

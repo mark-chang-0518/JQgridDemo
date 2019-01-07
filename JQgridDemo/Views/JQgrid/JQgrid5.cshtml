@@ -1,0 +1,250 @@
+﻿@{
+    ViewBag.Title = "Set-Method (3)";
+}
+<div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <!-- modal-dialog-centered 顯示置中 -->
+    <!-- 要使用客製化的需加入 modal-dialog-centered -->
+    <div class="modal-dialog modal-dialog-centered" data-backdrop="false" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">資料</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group row">
+                    <div class="col-12 col-sm-2 ">
+                        <label class="col-form-label col-form-label-lg">Date</label>
+                    </div>
+                    <div class="col-12 col-sm-10">
+                        <input id="Dialog_invdate" type="text" class="form-control form-control-lg DialogInput" name="">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-12 col-sm-2 ">
+                        <label class="col-form-label col-form-label-lg">Client</label>
+                    </div>
+                    <div class="col-12 col-sm-10">
+                        <input id="Dialog_name" type="text" class="form-control form-control-lg DialogInput" name="">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-12 col-sm-2 ">
+                        <label class="col-form-label col-form-label-lg">Amount</label>
+                    </div>
+                    <div class="col-12 col-sm-10">
+                        <input id="Dialog_amount" type="text" class="form-control form-control-lg DialogInput" name="">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-12 col-sm-2 ">
+                        <label class="col-form-label col-form-label-lg">Tax</label>
+                    </div>
+                    <div class="col-12 col-sm-10">
+                        <input id="Dialog_tax" type="text" class="form-control form-control-lg DialogInput" name="">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-12 col-sm-2 ">
+                        <label class="col-form-label col-form-label-lg">Total</label>
+                    </div>
+                    <div class="col-12 col-sm-10">
+                        <input id="Dialog_total" type="text" class="form-control form-control-lg DialogInput" name="">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-12 col-sm-2 ">
+                        <label class="col-form-label col-form-label-lg">Notes</label>
+                    </div>
+                    <div class="col-12 col-sm-10">
+                        <input id="Dialog_note" type="text" class="form-control form-control-lg DialogInput" name="">
+                    </div>
+                </div>
+                <input type="hidden" id="Dialog_id">
+            </div>
+            <div class="modal-footer">
+                <button id="Dialog_Add" type="button" class="btn btn-primary dialogbutton">新增</button>
+                <button id="Dialog_Edi" type="button" class="btn btn-primary dialogbutton">修改</button>
+                <button id="Dialog_Del" type="button" class="btn btn-primary dialogbutton">刪除</button>
+                <button id="Dialog_Close" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div>
+    <a id="Add" href="#" class="btn btn-primary">新增</a>
+    <table id="list2"></table>
+    <div id="pager2"></div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        function formatterAct(cellvalue, options, rdata) {
+
+            var str = '';
+            str += '<div class="btn-group">';
+            str += '<a title="修改" class="btn actionEditIcon" style="padding-right:4px;padding-left:4px;padding-bottom:0px;padding-top:0px;" href="#" id="' + options.gid + 'Edit' + options.rowId + '" return:false;="">';
+            str += '<i class="fa fa-pencil-square-o fa-lg"></i></a>';
+            str += '<a title="檢視" class="btn actionViewIcon" style="padding-right:4px;padding-left:4px;padding-bottom:0px;padding-top:0px;" href="#" id="' + options.gid + 'View' + options.rowId + '" return:false;="">';
+            str += '<i class="fa fa-search fa-lg"></i></a>';
+            str += '<a title="刪除" class="btn actionDeleIcon" style="padding-right:4px;padding-left:4px;padding-bottom:0px;padding-top:0px;" href="#" id="' + options.gid + 'Dele' + options.rowId + '" return:false;="">';
+            str += '<i class="fa fa-trash fa-lg"></i></a>';
+            str += '</div>';
+            return str;
+        }
+        var data = [
+            { id: "1", invdate: "2007-10-01", name: "test", note: "note", amount: "200.00", tax: "10.00", total: "210.00" },
+            { id: "2", invdate: "2007-10-02", name: "test2", note: "note2", amount: "300.00", tax: "20.00", total: "320.00" },
+            { id: "3", invdate: "2007-09-01", name: "test3", note: "note3", amount: "400.00", tax: "30.00", total: "430.00" },
+            { id: "4", invdate: "2007-10-04", name: "test", note: "note", amount: "200.00", tax: "10.00", total: "210.00" },
+            { id: "5", invdate: "2007-10-05", name: "test2", note: "note2", amount: "300.00", tax: "20.00", total: "320.00" },
+            { id: "6", invdate: "2007-09-06", name: "test3", note: "note3", amount: "400.00", tax: "30.00", total: "430.00" },
+        ];
+
+        $("#list2").jqGrid({
+            datatype: "local",
+            data: data,
+            colNames: ['Action','Inv No', 'Date', 'Client', 'Amount', 'Tax', 'Total', 'Notes'],
+            colModel: [
+                { name: "act", index: "act", width: 150, sortable: false, formatter: formatterAct},
+                { name: 'id', index: 'id', width: 150 },
+                { name: 'invdate', index: 'invdate', width: 150 },
+                { name: 'name', index: 'name', width: 150 },
+                { name: 'amount', index: 'amount', align: "right", width: 150 },
+                { name: 'tax', index: 'tax', align: "right", width: 150 },
+                { name: 'total', index: 'total', align: "right", width: 150 },
+                { name: 'note', index: 'note', width: 150, sortable: false }
+            ],
+            width: 900,
+            height: 'auto',
+            rowNum: 10,
+            rowList: [10, 20, 30],
+            pager: '#pager2',
+            sortname: 'id',
+            viewrecords: true,
+            //sortorder: "desc",
+            caption: "Set-Method (3)",
+            loadComplete: function () {
+                jqgridCustom.updatePagerIcons($(this));
+                loadComplete();
+            },
+        });
+        $("#list2").jqGrid('navGrid', '#pager2', { edit: false, add: false, del: false });
+
+        function loadComplete() {
+            $('#' + 'list2' + ' > tbody > tr:gt(0) ').each(function (i, j) {
+                var id = $('#list2').jqGrid('getGridParam', 'data')[i].id;     
+                //修改
+                $(this).find('td').find('a.actionEditIcon').each(function () {
+                    $(this).off('click');
+                    $(this).on('click', function () {
+                        dialogOpen('Edit', id);
+                    });
+                });
+                //檢視
+                $(this).find('td').find('a.actionViewIcon').each(function () {
+                    $(this).off('click');
+                    $(this).on('click', function () {
+                        dialogOpen('View', id);
+                    });
+                });
+                //刪除
+                $(this).find('td').find('a.actionDeleIcon').each(function () {
+                    $(this).off('click');
+                    $(this).on('click', function () {
+                        dialogOpen('Dele', id);
+                    });
+                });
+            });
+        }
+
+        $('#Add').on('click', function () {
+            dialogOpen('Add');
+        })
+
+        var id = 7;
+
+        $('#Dialog_Add').on('click', function () {
+            $("#list2").jqGrid('addRowData', id, {
+                id: id,
+                invdate: $('#Dialog_invdate').val(),
+                name: $('#Dialog_name').val(),
+                amount: $('#Dialog_amount').val(),
+                tax: $('#Dialog_tax').val(),
+                total: $('#Dialog_total').val(),
+                note: $('#Dialog_note').val()
+            });
+            id += 1;
+            loadComplete();
+            $('#Dialog_Close').click();
+        })
+
+        $('#Dialog_Edi').on('click', function () {
+            $("#list2").jqGrid('setRowData', $('#Dialog_id').val(), {
+                invdate: $('#Dialog_invdate').val(),
+                name: $('#Dialog_name').val(),
+                amount: $('#Dialog_amount').val(),
+                tax: $('#Dialog_tax').val(),
+                total: $('#Dialog_total').val(),
+                note: $('#Dialog_note').val()
+            });
+            $('#Dialog_Close').click();
+        })
+
+        $('#Dialog_Del').on('click', function () {
+            $("#list2").jqGrid('delRowData', $('#Dialog_id').val());
+            $('#Dialog_Close').click();
+        })
+
+        function dialogOpen(event, id) {
+            $(".dialogbutton").hide();
+            $('.DialogInput').prop('disabled', true);
+            reSetData();
+            setData(id);
+            switch (event)
+            {
+                case 'Add':
+                    $('.DialogInput').prop('disabled', false);
+                    $('#Dialog_Add').show();
+                break;
+                case 'Edit':
+                    $('.DialogInput').prop('disabled', false);
+                    $('#Dialog_Edi').show();
+                break;
+                case 'View':
+
+                break;
+                case 'Dele':
+                    $('#Dialog_Del').show();
+                break;
+            }
+            $('#exampleModalLong').modal('show');
+        }
+
+        function reSetData() {
+            $('#Dialog_invdate').val('');
+            $('#Dialog_name').val('');
+            $('#Dialog_amount').val('');
+            $('#Dialog_tax').val('');
+            $('#Dialog_total').val('');
+            $('#Dialog_note').val('');
+            $('#Dialog_id').val('');
+        }
+
+        function setData(id) {
+            id = id || '0';
+            if (id != '0') {
+                var data = $("#list2").jqGrid('getRowData', id);
+                $('#Dialog_invdate').val(data.invdate);
+                $('#Dialog_name').val(data.name);
+                $('#Dialog_amount').val(data.amount);
+                $('#Dialog_tax').val(data.tax);
+                $('#Dialog_total').val(data.total);
+                $('#Dialog_note').val(data.note);
+                $('#Dialog_id').val(id);
+            }
+        }
+
+        
+    });
+</script>

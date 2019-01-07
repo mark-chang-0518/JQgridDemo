@@ -1,0 +1,108 @@
+﻿@{
+    ViewBag.Title = "補充應用 (3)";
+}
+<div>
+    <div id="listDiv" class="jqd"></div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        createJqgridByCache('listDiv', 'list2', 'pager2');
+        function createJqgridByCache(jqgridDivId, listId, pagerId) {
+            $('#' + jqgridDivId).children().remove();
+            $('#' + jqgridDivId).append('<table id="' + listId + '"></table>');
+            $('#' + jqgridDivId).append('<div id="' + pagerId + '"></div>');
+            $('#' + listId).jqGrid({
+                url: '@Url.Action("GetCacheData", "JQgrid")',
+                datatype: 'json',
+                mtype: 'POST',
+                postData: {
+                    type : "JQgrid10"
+                },
+                jsonReader:
+                {
+                    repeatitems: false,
+                },
+                colNames: [
+                   'Inv No', 'Date', 'Client', 'Amount', 'Tax', 'Total', 'Notes'],
+                colModel: [
+                    { name: 'id', index: 'id', width: 100 },
+                    { name: 'invdate', index: 'invdate', width: 100 },
+                    { name: 'name', index: 'name', width: 100 },
+                    { name: 'amount', index: 'amount', align: "right", width: 100 },
+                    { name: 'tax', index: 'tax', align: "right", width: 100 },
+                    { name: 'total', index: 'total', align: "right", width: 100 },
+                    { name: 'note', index: 'note', width: 100, sortable: false }
+                ],
+                rowNum: 10,
+                rowList: [10,20,30],
+                rownumbers: true,
+                rownumWidth: 40,
+                pager: '#' + pagerId,
+                height: 'auto',
+                width: 'auto',
+                viewrecords: true,
+                caption: '補充應用 (3)',
+                resizable: false,
+                //autoencode: true,
+                viewsortcols: [true, 'vertival', true],
+                ajaxRowOptions: { contentType: "application/json" },
+                subGrid: true,
+                subGridRowExpanded: function (subgrid_id, row_id) {
+                    var subgrid_table_id, pager_id;
+                    subgrid_table_id = subgrid_id + "_t";
+                    pager_id = "p_" + subgrid_table_id;
+                    $('#' + subgrid_id).html("<table id='" + subgrid_table_id +
+                        "'class='scroll'></table><div id='" + pager_id + "' class='scroll'></div>");
+                    $('#' + subgrid_table_id).jqGrid({
+                        url: '@Url.Action("GetCacheSubData", "JQgrid")',
+                        datatype: 'json',
+                        mtype: 'POST',
+                        postData: {
+                            type: "JQgrid10Sub",
+                            id: $("#list2").jqGrid('getRowData', row_id).id
+                        },
+                        jsonReader:
+                        {
+                            repeatitems: false,
+                        },
+                        colNames: ['ID Number', 'Last Sales', 'Name', 'Stock', 'Ship via', 'Notes'],
+                        colModel: [
+                            { name: 'id', index: 'id', width: 100, },
+                            { name: 'sdate', index: 'sdate', width: 100, },
+                            { name: 'name', index: 'name', width: 100, },
+                            { name: 'stock', index: 'stock', width: 100, },
+                            { name: 'ship', index: 'ship', width: 100, },
+                            { name: 'note', index: 'note', width: 158, }
+                        ],
+                        rowNum: 5,
+                        rowList: [5, 10, 15],
+                        rownumbers: true,
+                        rownumWidth: 40,
+                        pager: '#' + pager_id,
+                        height: 'auto',
+                        width: 'auto',
+                        viewrecords: true,
+                        caption: 'Sub Data',
+                        resizable: false,
+                        //autoencode: true,
+                        viewsortcols: [true, 'vertival', true],
+                        ajaxRowOptions: { contentType: "application/json" },
+                        loadComplete: function () {
+                            jqgridCustom.updatePagerIcons($('#' + subgrid_table_id));
+                        }
+                    });
+                    $('#' + subgrid_table_id).jqGrid('navGrid', '#' + pager_id, { edit: false, add: false, del: false });
+
+                },
+                serializeRowData: function (data) {
+                    return JSON.stringify(data);
+                },
+                loadComplete: function () {
+                    jqgridCustom.updatePagerIcons($(this));
+                }
+            });
+            $('#' + listId).jqGrid('navGrid', '#' + pagerId, { edit: false, add: false, del: false });
+
+        }
+    });
+</script>

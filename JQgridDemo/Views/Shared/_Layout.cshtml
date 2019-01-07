@@ -1,0 +1,173 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - JQgridDemo</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/jqueryui")
+</head>
+<body>
+    <div class="container-fluid">
+        <nav class="navbar fixed-top navbar-expand-lg flex-wrap navbar-dark bg-primary">
+            <div class="col-12" style="padding-left: 0.5%">
+                <a class="navbar-brand" href="#">JQgridDemo</a>
+            </div>
+            <!-- 手機的區塊 -->
+            @*<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>*@
+            <!-- 手機的區塊 -->
+            <div class="col-12 collapse navbar-collapse " id="navbarSupportedContent">
+                <!-- 選單清單 -->
+                <!-- mx-auto 把剩下的空間放到中間 -->
+                <!-- mr-auto 把剩下的空間放到右邊 -->
+                <!-- <ul class="navbar-nav"> -->
+                <ul class="navbar-nav mr-auto">
+                    @*<li class="nav-item active">
+                            <a class="nav-link" href="#">首頁 <span class="sr-only">(current)</span></a>
+                        </li>*@
+                    <li class="nav-item">
+                        <!-- 使用 Id 與  data-toggle="modal" 來和 Model 互動 -->
+                        @* <a class="nav-link" href="#exampleModalLong" data-toggle="modal" data-backdrop="static">登入</a>*@
+                    </li>
+                    <li class="nav-item dropdown">
+                        <!-- Id 對應下面 aria-labelledby -->
+                        @*<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Dropdown
+                            </a>*@
+                        @*<div class="dropdown-menu dropright" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="#exampleModalLong2" data-toggle="modal">Action</a>
+                                <a class="dropdown-item" href="#">Another action</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#">Something else here</a>
+                                <a class="dropdown-item dropdown-toggle " href="#" id="navbarDropdown2" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown2</a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown2">
+                                    <a class="dropdown-item" href="#">Action2</a>
+                                    <a class="dropdown-item" href="#">Another action2</a>
+                                </div>
+                            </div>*@
+                    </li>
+                    <li class="nav-item">
+                        @*<a class="nav-link disabled" href="#">Disabled</a>*@
+                    </li>
+                </ul>
+                <!-- 選單清單 -->
+                <!-- Search 區塊 -->
+                <!-- <form class="form-inline my-2 ml-auto my-lg-0"> -->
+                <form class="form-inline my-2 my-lg-0">
+                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Search</button>
+                </form>
+                <!-- Search 區塊 -->
+            </div>
+        </nav>
+        <div class="row">
+            <div class="col-12 col-sm-3">
+                <div id="accordion">
+                    <div class="card">
+                        <div class="card-header" id="headingOne">
+                            <h5 class="mb-0">
+                                <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                    基本應用
+                                </button>
+                            </h5>
+                        </div>
+                        <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+                            <div class="list-group list-group-flush">
+                                <div>
+                                    <a class="list-group-item list-group-item-action" href="@Url.Action("JQgrid1", "JQgrid", null)">JsonData</a>
+                                    <a class="list-group-item list-group-item-action" href="@Url.Action("JQgrid2", "JQgrid", null)">Get Methods</a>
+                                    <a class="list-group-item list-group-item-action" href="@Url.Action("JQgrid3", "JQgrid", null)">Set-Method (1)</a>
+                                    <a class="list-group-item list-group-item-action" href="@Url.Action("JQgrid4", "JQgrid", null)">Set-Method (2)</a>
+                                    <a class="list-group-item list-group-item-action" href="@Url.Action("JQgrid5", "JQgrid", null)">Set-Method (3)</a>
+                                </div>
+                            </div>
+                            @*<div class="card-body">
+                    <a href="@Url.Action("Login", "Account", null)" class="card-link">基本用法</a>
+                </div>*@
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header" id="headingTwo">
+                            <h5 class="mb-0">
+                                <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                    實際資料載入方式
+                                </button>
+                            </h5>
+                        </div>
+                        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+                            <div class="list-group list-group-flush">
+                                <div>
+                                    <a class="list-group-item list-group-item-action" href="@Url.Action("JQgrid6", "JQgrid", null)">Ajax Data (1)</a>
+                                    <a class="list-group-item list-group-item-action" href="@Url.Action("JQgrid7", "JQgrid", null)">Ajax Data (2)</a>
+                                </div>
+                            </div>
+                            @*<div class="card-body">
+                    Ajax Data
+                </div>*@
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header" id="headingThree">
+                            <h5 class="mb-0">
+                                <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                    補充應用
+                                </button>
+                            </h5>
+                        </div>
+                        <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+                            <div class="list-group list-group-flush">
+                                <div>
+                                    <a class="list-group-item list-group-item-action" href="@Url.Action("JQgrid8", "JQgrid", null)">補充應用 (1)</a>
+                                    <a class="list-group-item list-group-item-action" href="@Url.Action("JQgrid9", "JQgrid", null)">補充應用 (2)</a>
+                                    <a class="list-group-item list-group-item-action" href="@Url.Action("JQgrid10", "JQgrid", null)">補充應用 (3)</a>
+                                </div>
+                            </div>
+                            @*<div class="card-body">
+                                補充應用
+                            </div>*@
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header" id="headingFour">
+                            <h5 class="mb-0">
+                                <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                                    HOMEWORK
+                                </button>
+                            </h5>
+                        </div>
+                        <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordion">
+                            <div class="list-group list-group-flush">
+                                <div>
+                                    <a class="list-group-item list-group-item-action" href="@Url.Action("JQgrid11", "JQgrid", null)">作業</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-sm-9">
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+    @RenderSection("scripts", required: false)
+    @Scripts.Render("~/bundles/jqueryjqgrid")
+    <script type="text/javascript">
+        $(function () {
+            $('.navbar.fixed-top').after(
+                '<div class="space" style="height:'
+                +
+                ($('.navbar.fixed-top').outerHeight(true) + 5)
+                +
+                'px"></div>'
+            );
+        })
+    </script>
+</body>
+</html>
